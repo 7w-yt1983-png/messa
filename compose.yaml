@@ -1,0 +1,48 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      APP_ORIGIN: ${APP_ORIGIN:?Set an HTTPS APP_ORIGIN in .env}
+      DATA_DIR: /app/data
+      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-false}
+      REGISTRATION_CODE: ${REGISTRATION_CODE:-}
+    volumes:
+      - messa_data:/app/data
+    expose:
+      - '3000'
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    pids_limit: 128
+  proxy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      MESSA_DOMAIN: ${MESSA_DOMAIN:?Set MESSA_DOMAIN in .env}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  messa_data:
+  caddy_data:
+  caddy_config:
