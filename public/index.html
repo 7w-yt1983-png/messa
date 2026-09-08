@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563c5" />
+  <meta name="description" content="Messa — ваше пространство для общения. Личные и групповые чаты, без рекламы и лишнего шума." />
+  <title>Messa — ближе к своим</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a href="#composer-input" class="skip-link">К сообщению</a>
+  <section id="auth" class="auth-layout" aria-label="Вход в Messa">
+    <div class="auth-story">
+      <div class="wordmark"><span data-logo></span><span>messa<span class="brand-dot">.</span></span></div>
+      <div class="story-content"><span class="eyebrow">ВАШЕ ПРОСТРАНСТВО ДЛЯ ОБЩЕНИЯ</span><h1>Ближе.<br />Даже на<br /><span>расстоянии.</span></h1><p>Важные люди. Живые разговоры.<br />И ничего лишнего между вами.</p><div class="story-message"><span class="story-initial">М</span><div><strong>Мама</strong><p>Ты как? Просто захотелось написать 💙</p></div><span class="story-time">сейчас</span></div></div>
+      <div class="story-footer"><span>Без рекламы. Под вашим контролем.</span><span>MESSA / 01</span></div>
+    </div>
+    <div class="auth-main">
+      <button id="auth-theme" class="icon-button auth-theme" aria-label="Переключить тему" type="button"></button>
+      <div class="auth-card"><span class="eyebrow">РАДЫ ВАС ВИДЕТЬ</span><h2 id="auth-title">С возвращением</h2><p id="auth-description" class="subtle">Ваши разговоры ждут вас.</p>
+        <form id="auth-form">
+          <label id="display-name-field" hidden>Как вас зовут<input name="displayName" autocomplete="name" maxlength="50" placeholder="Александр" /></label>
+          <label>Имя пользователя<span class="input-prefix"><span>@</span><input name="username" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9_]+" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="your_name" /></span></label>
+          <label>Пароль<input name="password" type="password" required minlength="12" maxlength="128" autocomplete="current-password" placeholder="Не менее 12 символов" /></label>
+          <label id="invite-field" hidden>Код приглашения<input name="inviteCode" autocomplete="off" /></label>
+          <p id="auth-error" class="form-error" role="alert" hidden></p>
+          <button class="primary auth-submit" type="submit" id="auth-submit">Войти в Messa</button>
+        </form>
+        <p class="auth-switch"><span id="auth-switch-copy">Впервые здесь?</span> <button id="auth-switch" class="text-button" type="button">Создать аккаунт</button></p>
+        <div class="or-divider"><span>или сначала осмотритесь</span></div>
+        <button id="demo-button" type="button" class="secondary full-width">Посмотреть демо <span aria-hidden="true">↗</span></button>
+        <p class="auth-note">Демо использует только вымышленные данные.<br />В этой версии нет сквозного шифрования.</p>
+        <p id="boot-status" class="subtle" role="status">Подключаемся…</p>
+      </div>
+      <span class="auth-bottom">Меньше шума. Больше смысла.</span>
+    </div>
+  </section>
+  <div id="app" class="app" hidden>
+    <nav class="rail" aria-label="Основная навигация">
+      <a class="rail-brand" href="/" aria-label="Messa — главная" data-logo></a>
+      <div class="rail-main"><button class="rail-button active" data-action="nav-chats" title="Сообщения" aria-label="Сообщения" data-icon="chat"></button><button class="rail-button" data-action="nav-saved" title="Избранное" aria-label="Избранное" data-icon="bookmark"></button><button class="rail-button" data-action="new-chat" title="Найти собеседника" aria-label="Найти собеседника" data-icon="users"></button></div>
+      <div class="rail-bottom"><button class="rail-button" data-action="settings" title="Настройки" aria-label="Настройки" data-icon="settings"></button><button id="profile-button" data-action="settings" class="profile-button" aria-label="Мой профиль"></button></div>
+    </nav>
+    <aside class="sidebar" aria-label="Список чатов">
+      <div class="sidebar-heading"><div><span class="eyebrow">ВАШЕ ПРОСТРАНСТВО</span><h1>Сообщения<span class="title-dot"></span></h1></div><button class="icon-button new-chat-button" data-action="new-chat" aria-label="Новый чат" title="Новый чат" data-icon="plus"></button></div>
+      <label class="search-field"><span data-icon="search"></span><input id="chat-search" placeholder="Найти разговор" autocomplete="off" aria-label="Поиск чатов" /><kbd>⌘ K</kbd></label>
+      <div class="filters" role="group" aria-label="Фильтр чатов"><button data-filter="all" class="active" aria-pressed="true">Все</button><button data-filter="unread" aria-pressed="false">Новые <span id="unread-total"></span></button><button data-filter="group" aria-pressed="false">Группы</button></div>
+      <div id="chat-list" class="chat-list"></div>
+      <div class="sidebar-footer"><button class="archive-button" data-action="archive" data-icon-before="archive">Архив</button><span class="connection-label"><span id="connection-dot" class="status-dot"></span><span id="connection-text">Подключение</span></span></div>
+    </aside>
+    <main class="conversation" id="conversation">
+      <div id="demo-banner" class="demo-banner" hidden><span>Демо · вымышленные данные</span><button data-action="exit-demo">Выйти из демо ↗</button></div>
+      <header id="chat-header" class="chat-header"></header>
+      <div id="message-search-bar" class="message-search-bar" hidden><span data-icon="search"></span><input id="message-search" type="search" maxlength="100" aria-label="Поиск сообщений в чате" placeholder="Поиск в этом разговоре…" /><button class="icon-button" data-action="close-search" aria-label="Закрыть поиск" data-icon="close"></button></div>
+      <div id="connection-banner" class="connection-banner" role="status" hidden>Связь прервалась. Переподключаемся. Неотправленные сообщения можно повторить.</div>
+      <div class="messages-wrap"><div id="messages" class="messages" tabindex="0" aria-label="Сообщения"></div><button id="scroll-bottom" class="scroll-bottom icon-button" data-action="scroll-bottom" aria-label="К последним сообщениям" data-icon="arrowDown" hidden></button></div>
+      <div id="typing" class="typing" role="status"></div>
+      <form id="composer" class="composer" hidden>
+        <div id="composer-context" class="composer-context" hidden></div>
+        <div id="attachment-preview" class="attachment-preview" hidden></div>
+        <div class="composer-main"><button id="attach-button" class="icon-button" type="button" data-action="attach" aria-label="Прикрепить файл" title="Файл до 10 МБ" data-icon="attach"></button><textarea id="composer-input" rows="1" maxlength="4000" placeholder="Напишите что-нибудь хорошее…" aria-label="Текст сообщения"></textarea><button type="button" class="icon-button emoji-button" data-action="emoji" aria-label="Добавить эмодзи" data-icon="smile"></button><button id="send-button" type="submit" class="send-button" aria-label="Отправить сообщение" data-icon="send"></button></div>
+        <div class="composer-foot"><span>Enter — отправить <span class="foot-separator">·</span> Shift + Enter — новая строка</span><span id="character-count"></span></div>
+        <input id="file-input" type="file" hidden />
+      </form>
+    </main>
+    <aside id="inspector" class="inspector" aria-label="Информация о чате" hidden></aside>
+  </div>
+  <dialog id="modal" class="modal"><div id="modal-content"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+  <noscript>Для Messa нужен JavaScript. Включите его в настройках браузера.</noscript>
+</body>
+</html>
